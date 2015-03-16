@@ -1,0 +1,15 @@
+{
+  "name": "hashcraft",
+  "version": "1.0.0",
+  "description": "RPG-influenced hash function",
+  "dependencies": {
+    "nan": "^1.7.0",
+    "node-gyp": "^1.0.3"
+  },
+  "scripts": {
+    "install": "node-gyp rebuild"
+  },
+  "author": "austin.xyz",
+  "license": "MIT",
+  "gypfile": true
+}
