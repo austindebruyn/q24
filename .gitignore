@@ -2,3 +2,4 @@ bin/*
 node_modules
 build
 src/build
+npm-debug.log

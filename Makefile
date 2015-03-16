@@ -11,6 +11,10 @@ npm:
 cli: 
 	g++ -o bin/q24sum src/*.cpp
 
+test:
+	mocha tests
+
 clean:
-	rm -r bin/*
+	rm -r bin
 	rm -r src/build
+	rm -r build

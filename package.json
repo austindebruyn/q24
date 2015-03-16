@@ -1,15 +1,19 @@
 {
-  "name": "hashcraft",
+  "name": "q24",
   "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/austindebruyn/q24.git"
+  },
   "description": "RPG-influenced hash function",
   "dependencies": {
+    "mocha": "^2.2.1",
     "nan": "^1.7.0",
     "node-gyp": "^1.0.3"
   },
   "scripts": {
-    "install": "node-gyp rebuild"
+    "install": "make all"
   },
   "author": "austin.xyz",
-  "license": "MIT",
-  "gypfile": true
+  "license": "MIT"
 }
