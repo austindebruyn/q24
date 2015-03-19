@@ -9,6 +9,7 @@ npm:
 	cp build/Release/q24.node ../bin
 
 cli: 
+	mkdir -p bin
 	g++ -o bin/q24sum src/*.cpp
 
 test:
