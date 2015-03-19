@@ -11,6 +11,9 @@
     "nan": "^1.7.0",
     "node-gyp": "^1.0.3"
   },
+  "devDependencies": {
+    "v8-profiler": "^5.2.4"
+  },
   "scripts": {
     "install": "make all"
   },
