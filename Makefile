@@ -1,6 +1,6 @@
 
 
-all: npm cli
+all: npm
 
 npm:
 	cd src; \
