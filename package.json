@@ -1,21 +1,21 @@
 {
   "name": "q24",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "repository": {
     "type": "git",
     "url": "git://github.com/austindebruyn/q24.git"
   },
   "description": "RPG-influenced hash function",
   "dependencies": {
-    "mocha": "^2.2.1",
     "nan": "^1.7.0",
     "node-gyp": "^1.0.3"
   },
   "devDependencies": {
-    "v8-profiler": "^5.2.4"
+    "v8-profiler": "^5.2.4",
+    "mocha": "^2.2.1"
   },
   "scripts": {
-    "install": "make all"
+    "install": "make npm"
   },
   "author": "austin.xyz",
   "license": "MIT"

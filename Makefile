@@ -1,8 +1,9 @@
 
 
-all: npm
+all: npm cli 
 
 npm:
+	mkdir -p bin; \
 	cd src; \
 	node-gyp configure; \
 	node-gyp build; \
