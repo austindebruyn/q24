@@ -1,6 +1,8 @@
 
 ##Quest-24 Hash Function
 
+Node.js 0.10.x required for now.
+
 ```
 var q24 = require('q24');
 q24.hashAsync('hash me', function (err, hash) {
@@ -23,6 +25,12 @@ $ 3d164a33238d469757741a462ae5cd8ad41279ef421ce734
 ```
 
 Run ```q24sum -h``` for more details.
+
+##Install
+
+```npm install q24```
+
+If you have mocha, you can run the tests inside directory node_modules/q24 with the ```mocha``` command.
 
 ##License
 
