@@ -1,13 +1,13 @@
 
-#Quest-24 Hash Function
+##Quest-24 Hash Function
 
 ```
 var q24 = require('q24');
-q24.hashAsync('the quick brown fox jumped over the lazy brown dog', function (err, hash) {
+q24.hashAsync('hash me', function (err, hash) {
 	if (err) throw err;
 
 	console.log(hash);
-	// 3d164a33238d469757741a462ae5cd8ad41279ef421ce734
+	// e97bb84c63cc81e90c3a6438c0a62b7700b439aa92b65cf9
 });
 ```
 
@@ -24,7 +24,7 @@ $ 3d164a33238d469757741a462ae5cd8ad41279ef421ce734
 
 Run ```q24sum -h``` for more details.
 
-#License
+##License
 
 MIT License
 http://opensource.org/licenses/MIT

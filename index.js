@@ -1,0 +1,1 @@
+try { module.exports = require('./bin/q24.node'); } catch (err) { module.exports = {}; }
