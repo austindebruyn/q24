@@ -1,5 +1,7 @@
 
-##Quest-24 Hash Function
+##q24 Hash Function
+
+Live demo at http://au.stin.xyz:6678 .
 
 Node.js 0.10.x required for now.
 
