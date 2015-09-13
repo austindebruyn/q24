@@ -4,90 +4,98 @@
 #include <nan.h>
 #include "q24.h"
 
-using namespace v8;
+using v8::Function;
+using v8::FunctionTemplate;
+using v8::Handle;
+using v8::Object;
+using v8::String;
+using v8::Local;
+using v8::Number;
+using v8::Value;
+using Nan::AsyncQueueWorker;
+using Nan::AsyncWorker;
+using Nan::Callback;
+using Nan::HandleScope;
+using Nan::New;
+using Nan::Null;
+using Nan::To;
+using Nan::Set;
+using Nan::GetFunction;
 
 static void convertHashToHexString(char *output, uint8_t *hash) {
 	for (int i = 0; i < HASH_LENGTH; i++)
 		sprintf(&output[i*2], "%02x", hash[i]);
 }
 
-class HashWorker : public NanAsyncWorker {
+class HashAsyncWorker : public AsyncWorker {
+ public:
+  HashAsyncWorker(Callback *callback, const uint8_t *entropy, int entropyLength)
+    : AsyncWorker(callback)
+    , entropy(entropy)
+    , entropyLength(entropyLength) {
+      output = new char[48];
+    }
+  ~HashAsyncWorker() {}
 
-	public:
-		HashWorker(NanCallback *callback, const uint8_t *entropy, int entropy_length)
-			: NanAsyncWorker(callback)
-			, entropy(entropy)
-			, entropy_length(entropy_length) {
-				output = new char[48];
-			}
+  // Executed inside the worker-thread.
+  // It is not safe to access V8, or V8 data structures
+  // here, so everything we need for input and output
+  // should go on `this`.
+  void Execute () {
+	  uint8_t *hash = compute(entropy, entropyLength, 0);
+	  convertHashToHexString(output, hash);
+  }
 
-		~HashWorker() {}
+  // Executed when the async work is complete
+  // this function will be run inside the main event loop
+  // so it is safe to use V8 again
+  void HandleOKCallback () {
+    Nan::HandleScope scope;
 
-		// Executed inside the worker-thread.
-		// It is not safe to access V8, or V8 data structures
-		// here, so everything we need for input and output
-		// should go on `this`.
-		void Execute () {
+    Local<Value> argv[] = {
+        Null()
+      , New<String>(output).ToLocalChecked()
+    };
 
-			uint8_t *hash = compute(entropy, entropy_length, 0);
-			convertHashToHexString(output, hash);
-		}
+    callback->Call(2, argv);
+  }
 
-		// Executed when the async work is complete
-		// this function will be run inside the main event loop
-		// so it is safe to use V8 again
-		void HandleOKCallback () {
-			NanScope();
-
-			Local<Value> argv[] = {
-				NanNull()
-				, NanNew<String>(output)
-			};
-
-			callback->Call(2, argv);
-		};
-
-	private:
-		const uint8_t *entropy;
-		char *output;
-		int entropy_length;
+ private:
+  const uint8_t *entropy;
+  char *output;
+  int entropyLength;
 };
 
+// Asynchronous access to the `Estimate()` function
 NAN_METHOD(HashAsync) {
-	NanScope();
+	std::string inputString(*v8::String::Utf8Value(info[0]->ToString()));
+  const uint8_t *entropy = (const uint8_t *)inputString.c_str();
+  int entropyLength = inputString.length();
 
-	std::string inputString(*v8::String::Utf8Value(args[0]->ToString()));
+  Callback *callback = new Callback(info[1].As<Function>());
 
-	const uint8_t *entropy = (const uint8_t *)inputString.c_str();
-	int entropyLength = inputString.length();
-
-	NanCallback *callback = new NanCallback(args[1].As<Function>());
-
-	NanAsyncQueueWorker(new HashWorker(callback, entropy, entropyLength));
-	NanReturnUndefined();
+  AsyncQueueWorker(new HashAsyncWorker(callback, entropy, entropyLength));
 }
 
-NAN_METHOD(HashSync) {
-	NanScope();
+// NAN_METHOD(HashSync) {
+// 	HandleScope scope;
 
-	std::string inputString(*v8::String::Utf8Value(args[0]->ToString()));
+// 	std::string inputString(*v8::String::Utf8Value(args[0]->ToString()));
 
-	const uint8_t *entropy = (const uint8_t *)inputString.c_str();
-	int entropyLength = inputString.length();
+// 	const uint8_t *entropy = (const uint8_t *)inputString.c_str();
+// 	int entropyLength = inputString.length();
 
-	char *output = new char[48];
+// 	char *output = new char[48];
 
-	uint8_t *hash = compute(entropy, entropyLength, 0);
-	convertHashToHexString(output, hash);
+// 	uint8_t *hash = compute(entropy, entropyLength, 0);
+// 	convertHashToHexString(output, hash);
 
-	NanReturnValue(NanNew<String>(output));
-}
+// 	ReturnValue(New<String>(output));
+// }
 
-void InitAll(Handle<Object> exports) {
-	exports->Set(NanNew<String>("hashAsync"),
-		NanNew<FunctionTemplate>(HashAsync)->GetFunction());
-	exports->Set(NanNew<String>("hashSync"),
-		NanNew<FunctionTemplate>(HashSync)->GetFunction());
+NAN_MODULE_INIT(InitAll) {
+  Nan::Set(target, New<String>("hashAsync").ToLocalChecked(),
+    GetFunction(New<FunctionTemplate>(HashAsync)).ToLocalChecked());
 }
 
 NODE_MODULE(q24, InitAll)
