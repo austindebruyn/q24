@@ -77,25 +77,23 @@ NAN_METHOD(HashAsync) {
   AsyncQueueWorker(new HashAsyncWorker(callback, entropy, entropyLength));
 }
 
-// NAN_METHOD(HashSync) {
-// 	HandleScope scope;
+NAN_METHOD(HashSync) {
+	std::string inputString(*v8::String::Utf8Value(info[0]->ToString()));
+  const uint8_t *entropy = (const uint8_t *)inputString.c_str();
+  int entropyLength = inputString.length();
 
-// 	std::string inputString(*v8::String::Utf8Value(args[0]->ToString()));
+  char *output = new char[48];
+  uint8_t *hash = compute(entropy, entropyLength, 0);
+  convertHashToHexString(output, hash);
 
-// 	const uint8_t *entropy = (const uint8_t *)inputString.c_str();
-// 	int entropyLength = inputString.length();
-
-// 	char *output = new char[48];
-
-// 	uint8_t *hash = compute(entropy, entropyLength, 0);
-// 	convertHashToHexString(output, hash);
-
-// 	ReturnValue(New<String>(output));
-// }
+  info.GetReturnValue().Set(New<String>(output).ToLocalChecked());
+}
 
 NAN_MODULE_INIT(InitAll) {
   Nan::Set(target, New<String>("hashAsync").ToLocalChecked(),
     GetFunction(New<FunctionTemplate>(HashAsync)).ToLocalChecked());
+  Nan::Set(target, Nan::New("hashSync").ToLocalChecked(),
+    Nan::GetFunction(Nan::New<FunctionTemplate>(HashSync)).ToLocalChecked());
 }
 
 NODE_MODULE(q24, InitAll)
