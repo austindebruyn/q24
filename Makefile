@@ -13,8 +13,9 @@ cli:
 	mkdir -p bin
 	g++ -o bin/q24sum src/*.cpp
 
+.PHONY: test
 test:
-	mocha tests
+	mocha test
 
 clean:
 	rm -r bin

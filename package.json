@@ -6,13 +6,11 @@
     "url": "git://github.com/austindebruyn/q24.git"
   },
   "description": "RPG-influenced hash function",
-  "dependencies": {
-    "nan": "^1.7.0",
-    "node-gyp": "^1.0.3"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "v8-profiler": "^5.2.4",
-    "mocha": "^2.2.1"
+    "nan": "^2.0.9",
+    "node-gyp": "^3.0.2",
+    "v8-profiler": "^5.3.0"
   },
   "scripts": {
     "install": "make npm"
