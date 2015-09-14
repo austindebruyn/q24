@@ -1,9 +1,9 @@
 
 ##q24 Hash Function
 
-Live demo at http://au.stin.xyz:6678 .
+Live demo at https://au.stin.xyz/q24 .
 
-Node.js 0.10.x required for now.
+Built for node v0.10.0 or v4.0.0.
 
 ```
 var q24 = require('q24');
@@ -32,7 +32,7 @@ Run ```q24sum -h``` for more details.
 
 ```npm install q24```
 
-If you have mocha, you can run the tests inside directory node_modules/q24 with the ```mocha``` command.
+Run the tests with ```make test```.
 
 ##License
 
